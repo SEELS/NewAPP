@@ -1,0 +1,56 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.sameh.pushnotification.fragment.DriverRateFragment">
+
+   <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+       <TextView
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:text="Your Rate"
+           android:textSize="60px"
+           android:textStyle="bold"
+           android:id="@+id/textView2" />
+
+       <me.itangqi.waveloadingview.WaveLoadingView
+           android:id="@+id/view"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+
+           android:layout_alignParentStart="true"
+           android:layout_below="@+id/textView2"
+
+           android:layout_marginTop="19dp"
+           app:wlv_borderColor="@color/colorAccent"
+           app:wlv_borderWidth="3dp"
+           app:wlv_round_rectangle="true"
+
+           app:wlv_shapeType="circle"
+           app:wlv_titleBottomColor="@color/white"
+           app:wlv_titleBottomSize="24sp"
+           app:wlv_titleBottomStrokeColor="@android:color/holo_blue_dark"
+
+           app:wlv_titleBottomStrokeWidth="3dp"
+           app:wlv_titleCenterColor="@color/white"
+           app:wlv_titleCenterSize="24sp"
+           app:wlv_titleCenterStrokeColor="@android:color/holo_blue_dark"
+           app:wlv_titleCenterStrokeWidth="3dp"
+           app:wlv_titleTopColor="@color/white"
+           app:wlv_titleTopSize="24sp"
+           app:wlv_titleTopStrokeColor="@android:color/holo_blue_dark"
+           app:wlv_titleTopStrokeWidth="3dp"
+           app:wlv_triangle_direction="north"
+           app:wlv_waveAmplitude="70"
+           app:wlv_waveColor="@color/colorAccent" />
+
+    </RelativeLayout>
+
+
+</FrameLayout>
