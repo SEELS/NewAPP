@@ -23,6 +23,7 @@ import android.widget.Toast;
 import com.example.sameh.pushnotification.R;
 import com.example.sameh.pushnotification.fragment.DriverRateFragment;
 import com.example.sameh.pushnotification.fragment.TripRateFragment;
+import com.example.sameh.pushnotification.fragment.TripShow;
 import com.example.sameh.pushnotification.other.ViewPagerAdapter;
 
 public class RateActivity extends AppCompatActivity
@@ -47,11 +48,13 @@ public class RateActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        navigationView.setCheckedItem(R.id.nav_rate);
 
         ViewPager viewPager = (ViewPager)findViewById(R.id.pager);
         ViewPagerAdapter pagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         pagerAdapter.addFragment(new DriverRateFragment(),"Driver");
         pagerAdapter.addFragment(new TripRateFragment(),"Trip");
+        pagerAdapter.addFragment(new TripShow(),"show");
         viewPager.setAdapter(pagerAdapter);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
@@ -108,24 +111,27 @@ public class RateActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
         Intent intent;
+        item.setChecked(true);
         if(id == R.id.nav_home) {
             intent = new Intent(this,MainActivity.class);
             startActivity(intent);
+            finish();
         } else if (id == R.id.nav_trip) {
             intent = new Intent(this,TripActivity.class);
             startActivity(intent);
+            finish();
         } else if (id == R.id.nav_rate) {
             intent = new Intent(this,RateActivity.class);
             startActivity(intent);
-
+            finish();
         } else if (id == R.id.nav_penalty) {
             intent = new Intent(this,PenaltyActivity.class);
             startActivity(intent);
-
+            finish();
         } else if (id == R.id.nav_profile) {
             intent = new Intent(this,ProfileActivity.class);
             startActivity(intent);
-
+            finish();
         } else if (id == R.id.nav_about_us) {
 
         } else if (id == R.id.nav_send) {

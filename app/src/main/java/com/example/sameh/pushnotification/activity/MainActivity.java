@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity
     String token;
     Button start;
     Button stop;
+    int QuitCount=0;
 
 
     @Override
@@ -65,7 +66,7 @@ public class MainActivity extends AppCompatActivity
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
+        navigationView.setCheckedItem(R.id.nav_home);
 
         start = findViewById(R.id.startService);
         stop = findViewById(R.id.stopService);
@@ -245,7 +246,12 @@ public class MainActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            if (QuitCount==0)
+            {
+                Toast.makeText(getApplicationContext(),"Press Back To Quit",Toast.LENGTH_LONG).show();
+                QuitCount++;
+            } else
+                super.onBackPressed();
         }
     }
 
@@ -295,21 +301,18 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_rate) {
             intent = new Intent(this,RateActivity.class);
             startActivity(intent);
-
         } else if (id == R.id.nav_penalty) {
             intent = new Intent(this,PenaltyActivity.class);
             startActivity(intent);
-
         } else if (id == R.id.nav_profile) {
             intent = new Intent(this,ProfileActivity.class);
             startActivity(intent);
-
         } else if (id == R.id.nav_about_us) {
 
         } else if (id == R.id.nav_send) {
 
         }
-
+        
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;

@@ -82,9 +82,9 @@ public class Login extends AppCompatActivity {
         final String password_temp = password;
 
 
-        if (sharedPreferences.getString("driverId","").equals(""))
-            LoginService(email_temp,password_temp);
-        else
+//        if (sharedPreferences.getString("driverId","").equals(""))
+//            LoginService(email_temp,password_temp);
+//        else
             login = 1;
 
         new android.os.Handler().postDelayed(

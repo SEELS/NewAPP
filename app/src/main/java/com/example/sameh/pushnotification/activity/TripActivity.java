@@ -43,6 +43,7 @@ public class TripActivity extends AppCompatActivity
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        navigationView.setCheckedItem(R.id.nav_trip);
 
         sharedPreferences = getApplicationContext().getSharedPreferences(getString(R.string.FCM_PREF), Context.MODE_PRIVATE);
         Toast.makeText(getApplicationContext(),"Trip",Toast.LENGTH_SHORT).show();
@@ -98,21 +99,23 @@ public class TripActivity extends AppCompatActivity
         if(id == R.id.nav_home) {
             intent = new Intent(this,MainActivity.class);
             startActivity(intent);
+            finish();
         } else if (id == R.id.nav_trip) {
             intent = new Intent(this,TripActivity.class);
             startActivity(intent);
+            finish();
         } else if (id == R.id.nav_rate) {
             intent = new Intent(this,RateActivity.class);
             startActivity(intent);
-
+            finish();
         } else if (id == R.id.nav_penalty) {
             intent = new Intent(this,PenaltyActivity.class);
             startActivity(intent);
-
+            finish();
         } else if (id == R.id.nav_profile) {
             intent = new Intent(this,ProfileActivity.class);
             startActivity(intent);
-
+            finish();
         } else if (id == R.id.nav_about_us) {
 
         } else if (id == R.id.nav_send) {
