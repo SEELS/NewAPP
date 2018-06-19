@@ -6,6 +6,9 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -18,6 +21,10 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.example.sameh.pushnotification.R;
+import com.example.sameh.pushnotification.other.ItemData;
+import com.example.sameh.pushnotification.other.RAdabter;
+
+import java.util.ArrayList;
 
 public class TripActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -26,6 +33,7 @@ public class TripActivity extends AppCompatActivity
     NavigationView navigationView;
     Toolbar toolbar = null;
     SharedPreferences sharedPreferences;
+    private ArrayList<ItemData> itemData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,8 +53,43 @@ public class TripActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setCheckedItem(R.id.nav_trip);
 
+
+
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
+        itemData = new ArrayList<>();
+        getItemsData();
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        RAdabter adapt =new RAdabter(itemData);
+        recyclerView.setAdapter(adapt);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+
         sharedPreferences = getApplicationContext().getSharedPreferences(getString(R.string.FCM_PREF), Context.MODE_PRIVATE);
         Toast.makeText(getApplicationContext(),"Trip",Toast.LENGTH_SHORT).show();
+    }
+
+    private void getItemsData() {
+        // fill item
+        ItemData item = new ItemData("Amina",R.drawable.rec);
+        ItemData item1 = new ItemData("Amina",R.drawable.rec1);
+        ItemData item2 = new ItemData("Amina",R.drawable.rec2);
+        itemData.add(item);
+        itemData.add(item1);itemData.add(item2);
+        return;
+//        String Url = "";
+//        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, Url, null, new Response.Listener<JSONObject>() {
+//            @Override
+//            public void onResponse(JSONObject response) {
+//
+//            }
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//
+//            }
+//        });
+//        SingleTon.getInstance(mContext).addToRequestQueue(request);
     }
 
     @Override
