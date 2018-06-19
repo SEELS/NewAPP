@@ -10,6 +10,7 @@
     <color name="primary_darker">#CC1D1D</color>
     <color name="accent">#FFFFFF</color>
 
+    <item name="customeblue" type="color">#FFD8DBD4</item>
     <color name="iron">#CCCCCC</color>
     <color name="white">#FFFFFF</color>
 </resources>
