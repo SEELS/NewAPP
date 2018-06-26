@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.sameh.pushnotification.AboutUsActivity"
+    >
+    <ScrollView
+        android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <RelativeLayout
+        android:background="@color/white"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/about"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="About Us"
+            android:textColor="@color/colorPrimary"
+            android:textStyle="bold"
+            android:textSize="20dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            />
+
+        <TextView
+            android:id="@+id/text_about_us"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/about"
+            android:text="SEELS (Smart End-to-End Logistic System), an IoT based solution, provides transportation companies with methods to track the trucks and products spatially and temporally, and procedures to rate the driver based on his behavior and adherence to basic driving rules while driving. "
+            android:textSize="18dp"
+            android:padding="20dp"
+            android:textStyle="bold"
+            android:textColor="#000"
+
+            />
+
+        <TextView
+            android:id="@+id/our_services"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/text_about_us"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="19dp"
+            android:text="Our Services"
+            android:textColor="@color/colorPrimary"
+            android:textSize="40dp"
+            android:textStyle="bold" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Goods Tracking"
+            android:id="@+id/Good_services"
+            android:textColor="@color/colorPrimary"
+            android:textStyle="bold"
+            android:textSize="20dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:layout_below="@+id/our_services"
+            />
+        <ImageView
+            android:padding="25dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/goods"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/Good_services_image"
+            android:layout_below="@+id/Good_services"
+        />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Track the transported goods in each truck spatially and temporally, check where and when each good was entered in a truck or gotten out of a truck. track a specific type of goods among all trips or all goods in a specific trip."
+            android:id="@+id/Good_services_text"
+            android:textStyle="bold"
+            android:textSize="20dp"
+            android:padding="20dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:textColor="#000"
+            android:layout_below="@+id/Good_services_image"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Truck Tracking"
+            android:id="@+id/Truck_services"
+            android:textColor="@color/colorPrimary"
+            android:textStyle="bold"
+            android:textSize="20dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:layout_below="@+id/Good_services_text"
+            />
+        <ImageView
+            android:padding="25dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/gps"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/Truck_services_image"
+            android:layout_below="@+id/Truck_services"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Track your trucks during the trips, from the source to the destination, step-by-step real time tracking to the path of each truck. "
+            android:id="@+id/Truck_services_text"
+            android:textStyle="bold"
+            android:textSize="20dp"
+            android:padding="20dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:textColor="#000"
+            android:layout_below="@+id/Truck_services_image"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Real-time Automatic Rating"
+            android:id="@+id/Rating_services"
+            android:textColor="@color/colorPrimary"
+            android:textStyle="bold"
+            android:textSize="20dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:layout_below="@+id/Truck_services_text"
+            />
+        <RatingBar
+            android:padding="25dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:numStars="6"
+            android:rating="6"
+            android:stepSize="1.0"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/Rating_services_image"
+            android:layout_below="@+id/Rating_services"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="rate the driver based on his behavior and adherence to basic driving rules while driving as following the speed limit and braking, in order to ensure the safety of the products, the driver, other trucks and the surroundings. "
+            android:id="@+id/Rating_services_text"
+            android:textStyle="bold"
+            android:textSize="20dp"
+            android:padding="20dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:textColor="#000"
+            android:layout_below="@+id/Rating_services_image"
+            />
+    </RelativeLayout>
+    </ScrollView>
+
+</RelativeLayout>

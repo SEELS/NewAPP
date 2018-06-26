@@ -28,6 +28,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.example.sameh.pushnotification.AboutUsActivity;
 import com.example.sameh.pushnotification.MapsActivity;
 import com.example.sameh.pushnotification.R;
 import com.example.sameh.pushnotification.Services.LocationService;
@@ -295,6 +296,7 @@ public class MainActivity extends AppCompatActivity
         if(id == R.id.nav_home) {
             intent = new Intent(this,MainActivity.class);
             startActivity(intent);
+            finish();
         } else if (id == R.id.nav_trip) {
             intent = new Intent(this,TripActivity.class);
             startActivity(intent);
@@ -304,13 +306,9 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_penalty) {
             intent = new Intent(this,PenaltyActivity.class);
             startActivity(intent);
-        } else if (id == R.id.nav_profile) {
-            intent = new Intent(this,ProfileActivity.class);
+        }  else if (id == R.id.nav_about_us) {
+            intent = new Intent(this,AboutUsActivity.class);
             startActivity(intent);
-        } else if (id == R.id.nav_about_us) {
-
-        } else if (id == R.id.nav_send) {
-
         }
         
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

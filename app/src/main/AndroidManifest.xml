@@ -43,10 +43,7 @@
             android:name=".activity.TripActivity"
             android:label="@string/title_activity_trip"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".activity.ProfileActivity"
-            android:label="@string/title_activity_profile"
-            android:theme="@style/AppTheme.NoActionBar" />
+
         <service android:name=".Services.notification.FcmInstanceIdService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />

@@ -74,16 +74,41 @@ public class LocationService extends Service
             double lat = location.getLatitude();
             double lon = location.getLongitude();
             double speed =0.0;
+            Log.i("SendLocation",prev_location.getSpeed()+"....");
             if (prev_location.getLongitude()!=0) {
                 double distance = location.distanceTo(prev_location);
                 double diffTime = location.getTime() - prev_location.getTime();
                 diffTime/=1000; // from milsecond to sec
                 diffTime/=3600;// from sec  to hour
                 distance/=1000; // from meter to KM
-                speed = distance / diffTime;
+                if (checkLocation(diffTime,distance,prev_location.getSpeed())) {
+                    speed = distance / diffTime;
+                    saveLocation(lat, lon, speed);
+                    prev_location.set(location);
+                    prev_location.setSpeed((float) speed);
+                }
+                else
+                    Log.i("SendLocation","not send....");
+            }
+            else {
+                saveLocation(lat, lon, speed);
+                prev_location.set(location);
+                prev_location.setSpeed(60);
             }
 
-            prev_location.set(location);
+        }
+
+        private boolean checkLocation(double time , double distance,double preSpeed) {
+            double expected_distance = (time * preSpeed)*1.5;
+            if (distance<=expected_distance)
+                return true;
+            else
+                return false;
+        }
+
+
+        public void saveLocation(double lat , double lon , double speed)
+        {
             sharedPreferences = getApplicationContext().getSharedPreferences(getString(R.string.FCM_PREF),Context.MODE_PRIVATE);
             String driverId = sharedPreferences.getString("driverId","");
             String tripId = sharedPreferences.getString("tripId","");

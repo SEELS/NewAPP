@@ -82,9 +82,9 @@ public class Login extends AppCompatActivity {
         final String password_temp = password;
 
 
-//        if (sharedPreferences.getString("driverId","").equals(""))
-//            LoginService(email_temp,password_temp);
-//        else
+        if (sharedPreferences.getString("driverId","").equals(""))
+            LoginService(email_temp,password_temp);
+        else
             login = 1;
 
         new android.os.Handler().postDelayed(
@@ -124,10 +124,8 @@ public class Login extends AppCompatActivity {
     }
 
     public void onLoginFailed(int error) {
-        if (error==0)
-            Toast.makeText(getApplicationContext(),"error in driver Id ",Toast.LENGTH_LONG).show();
-        else if(error==1)
-            Toast.makeText(getBaseContext(),"error in Password",Toast.LENGTH_LONG).show();
+        if (error==0 || error==1)
+            Toast.makeText(getApplicationContext(),"Wrong Id or Password ",Toast.LENGTH_LONG).show();
         else
             Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
 

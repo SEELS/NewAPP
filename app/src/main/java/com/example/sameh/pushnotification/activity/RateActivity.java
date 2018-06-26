@@ -15,6 +15,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.sameh.pushnotification.AboutUsActivity;
 import com.example.sameh.pushnotification.R;
 import com.example.sameh.pushnotification.fragment.DriverRateFragment;
 import com.example.sameh.pushnotification.fragment.TripRateFragment;
@@ -121,14 +122,9 @@ public class RateActivity extends AppCompatActivity
             intent = new Intent(this,PenaltyActivity.class);
             startActivity(intent);
             finish();
-        } else if (id == R.id.nav_profile) {
-            intent = new Intent(this,ProfileActivity.class);
-            startActivity(intent);
-            finish();
         } else if (id == R.id.nav_about_us) {
-
-        } else if (id == R.id.nav_send) {
-
+            intent = new Intent(this,AboutUsActivity.class);
+            startActivity(intent);
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
