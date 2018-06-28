@@ -172,6 +172,7 @@ public class MainActivity extends AppCompatActivity
                         tripId = response.getString("Success");
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.putString("tripId", tripId);
+                        editor.putString("lastId",tripId);
                         editor.commit();
                         Toast.makeText(getApplicationContext(),"You can start Your Trip Now",Toast.LENGTH_LONG).show();
                     }
@@ -277,6 +278,7 @@ public class MainActivity extends AppCompatActivity
             editor.remove("password");
             editor.remove("roadId");
             editor.remove("tripId");
+            editor.remove("lastId");
             editor.commit();
             Intent intent = new Intent(this,Login.class);
             startActivity(intent);

@@ -87,8 +87,10 @@ public class LocationService extends Service
                     prev_location.set(location);
                     prev_location.setSpeed((float) speed);
                 }
-                else
+                else{
                     Log.i("SendLocation","not send....");
+                    prev_location.setSpeed(60);
+                }
             }
             else {
                 saveLocation(lat, lon, speed);
@@ -100,6 +102,7 @@ public class LocationService extends Service
 
         private boolean checkLocation(double time , double distance,double preSpeed) {
             double expected_distance = (time * preSpeed)*1.5;
+            Log.i("speed",distance+"..."+expected_distance);
             if (distance<=expected_distance)
                 return true;
             else

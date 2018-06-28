@@ -1,8 +1,11 @@
 package com.example.sameh.pushnotification.activity;
 
+import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,6 +16,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -28,9 +32,17 @@ import com.example.sameh.pushnotification.adapter.TripItem;
 import com.example.sameh.pushnotification.other.ItemData;
 import com.example.sameh.pushnotification.other.SingleTon;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 public class TripActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -42,7 +54,8 @@ public class TripActivity extends AppCompatActivity
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    private ArrayList<TripItem> items;
+    private ArrayList<TripItem> items = new ArrayList<>();
+    private String driverId;
 
 
 
@@ -65,41 +78,61 @@ public class TripActivity extends AppCompatActivity
         navigationView.setCheckedItem(R.id.nav_trip);
 
 
-
         mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
-        // use this setting to improve performance if you know that changes
-        // in content do not change the layout size of the RecyclerView
-        mRecyclerView.setHasFixedSize(true);
-        // use a linear layout manager
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        // specify an adapter (see also next example)
-        items= new ArrayList<>();
-        //fill Items
-        // getItemsData();
-        for (int i=0;i<100;i++) {
-            TripItem item = new TripItem();
-            item.setDate("22/6/2018");
-            item.setDestination("Giza/Egypt");
-            item.setRate(4.5f);
-            item.setTruckId("MARS2018");
-            items.add(item);
-        }
-
-        mAdapter = new TripAdapter(items,this);
-        mRecyclerView.setAdapter(mAdapter);
-
 
         sharedPreferences = getApplicationContext().getSharedPreferences(getString(R.string.FCM_PREF), Context.MODE_PRIVATE);
-        Toast.makeText(getApplicationContext(),"Trip",Toast.LENGTH_SHORT).show();
+        driverId=sharedPreferences.getString("driverId","");
+        getItemsData(this);
+
     }
 
-    private void getItemsData() {
+    private synchronized void  getItemsData(final Context mContext) {
 
-        String Url = "";
+        String Url = "http://seelsapp.herokuapp.com/driverCompletedTrip/"+driverId;
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, Url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
+                try {
+                    if (response.has("Error")) {
+
+                            Toast.makeText(getApplicationContext(), response.getString("Error"), Toast.LENGTH_LONG).show();
+                    }
+                    else {
+                        Log.i("TripActivity","CallTrip");
+                        JSONArray array = response.getJSONArray("Success");
+                        for (int i=0;i<array.length();i++)
+                        {
+                            JSONObject object = array.getJSONObject(i);
+                            TripItem item = new TripItem();
+                            item.setRate((float) object.getDouble("rate"));
+                            JSONObject truck = object.getJSONObject("truck");
+                            item.setTruckId(truck.getString("id"));
+                            Date tripdate = new Date(object.getLong("date"));
+                            DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+                            String date = dateFormat.format(tripdate);
+                            item.setDate(date);
+                            JSONObject des = object.getJSONObject("destination");
+                            long lat = des.getLong("lat");
+                            long lon = des.getLong("lon");
+                            try {
+                                String destination =  getLocation(lat,lon);
+                                item.setDestination(destination);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            items.add(item);
+                        }
+
+                        Toast.makeText(getApplicationContext(),items.size()+"",Toast.LENGTH_LONG).show();
+                        mAdapter = new TripAdapter(items,mContext);
+                        mRecyclerView.setAdapter(mAdapter);
+
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
             }
         }, new Response.ErrorListener() {
@@ -109,6 +142,25 @@ public class TripActivity extends AppCompatActivity
             }
         });
         SingleTon.getInstance(getApplicationContext()).addToRequestQueue(request);
+    }
+
+    private String getLocation(long latitude,long longitude) throws IOException {
+        Geocoder geocoder;
+        List<Address> addresses;
+        geocoder = new Geocoder(this, Locale.getDefault());
+
+        addresses = geocoder.getFromLocation(latitude, longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+
+        String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+        String city = addresses.get(0).getLocality();
+        String state = addresses.get(0).getAdminArea();
+        String country = addresses.get(0).getCountryName();
+        String postalCode = addresses.get(0).getPostalCode();
+        String knownName = addresses.get(0).getFeatureName(); // Only if available else return NULL
+        if (city!=null)
+            return city+"/"+country;
+        else
+            return country;
     }
 
     @Override
@@ -142,6 +194,7 @@ public class TripActivity extends AppCompatActivity
             editor.remove("password");
             editor.remove("trip");
             editor.remove("tripId");
+            editor.remove("lastId");
             editor.commit();
             Intent intent = new Intent(this,Login.class);
             startActivity(intent);

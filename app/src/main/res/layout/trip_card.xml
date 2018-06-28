@@ -4,10 +4,15 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:id="@+id/trip_layout"
-    android:background="@color/white"
     >
-
     <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="15dp"
+        android:src="@color/cardview_shadow_start_color"
+        android:id="@+id/div"
+        />
+    <ImageView
+        android:layout_below="@+id/div"
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:src="@color/colorAccent"

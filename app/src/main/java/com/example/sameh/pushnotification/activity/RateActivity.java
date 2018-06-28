@@ -89,6 +89,7 @@ public class RateActivity extends AppCompatActivity
             editor.remove("password");
             editor.remove("trip");
             editor.remove("tripId");
+            editor.remove("lastId");
             editor.commit();
             Intent intent = new Intent(this,Login.class);
             startActivity(intent);

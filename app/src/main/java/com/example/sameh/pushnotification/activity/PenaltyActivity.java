@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.sameh.pushnotification.AboutUsActivity;
 import com.example.sameh.pushnotification.R;
@@ -28,6 +29,8 @@ import com.example.sameh.pushnotification.adapter.TripAdapter;
 import com.example.sameh.pushnotification.adapter.TripItem;
 import com.example.sameh.pushnotification.other.SingleTon;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -39,6 +42,7 @@ public class PenaltyActivity extends AppCompatActivity
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private ArrayList<PenaltyItem> items;
+    String tripId;
 
 
     SharedPreferences sharedPreferences;
@@ -76,30 +80,58 @@ public class PenaltyActivity extends AppCompatActivity
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         // specify an adapter (see also next example)
+        sharedPreferences = getApplicationContext().getSharedPreferences(getString(R.string.FCM_PREF),Context.MODE_PRIVATE);
+        tripId=sharedPreferences.getString("lastId","");
+
         items = new ArrayList<>();
         // fill items
-        //getItemsData();
-        for (int i=0;i<100;i++) {
-            PenaltyItem item = new PenaltyItem();
-            item.setDescription("Description sajgjagfgsagfyuasyfyusafuyasfyufasyfuaf");
-            item.setType("Speed Limit");
-            item.setImageId(R.drawable.speed);
-            items.add(item);
-        }
+        getItemsData(this);
+//        for (int i=0;i<100;i++) {
+//            PenaltyItem item = new PenaltyItem();
+//            item.setDescription("Description sajgjagfgsagfyuasyfyusafuyasfyufasyfuaf");
+//            item.setType("Speed Limit");
+//            item.setImageId(R.drawable.speed);
+//            items.add(item);
+//        }
 
-        mAdapter = new PenaltyAdapter(items,this);
-        mRecyclerView.setAdapter(mAdapter);
 
-        sharedPreferences = getApplicationContext().getSharedPreferences(getString(R.string.FCM_PREF), Context.MODE_PRIVATE);
-        Toast.makeText(getApplicationContext(),"Penalty",Toast.LENGTH_SHORT).show();
     }
 
-    private void getItemsData() {
+    private void getItemsData(final Context mContext) {
         // fill items
-        String Url = "";
+
+        String Url = "http://seelsapp.herokuapp.com/getPenaltiesByTrip/"+tripId;
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, Url, null, new Response.Listener<JSONObject>() {
             @Override
-            public void onResponse(JSONObject response) {
+            public void onResponse(JSONObject responseObject) {
+                try {
+                    if (responseObject.has("Error"))
+                    {
+                        Toast.makeText(getApplicationContext(),responseObject.getString("Error"),Toast.LENGTH_LONG).show();
+
+                    }
+                    else
+                    {
+                        JSONArray response = responseObject.getJSONArray("Success");
+                        for (int i=0;i<response.length();i++) {
+                            JSONObject jsonObject = response.getJSONObject(i);
+                            String type = jsonObject.getString("type");
+                            String value = jsonObject.getString("value");
+                            PenaltyItem item = new PenaltyItem();
+                            item.setType(type);
+                            item.setImageId(R.drawable.speed);
+                            // change based on type
+                            String Desc = "You have breack speed Limit with Speed"+value;
+                            item.setDescription(Desc);
+                            items.add(item);
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                mAdapter = new PenaltyAdapter(items,mContext);
+                mRecyclerView.setAdapter(mAdapter);
 
             }
         }, new Response.ErrorListener() {
@@ -142,6 +174,7 @@ public class PenaltyActivity extends AppCompatActivity
             editor.remove("password");
             editor.remove("trip");
             editor.remove("tripId");
+            editor.remove("lastId");
             editor.commit();
             Intent intent = new Intent(this,Login.class);
             startActivity(intent);

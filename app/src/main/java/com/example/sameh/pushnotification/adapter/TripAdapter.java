@@ -46,7 +46,7 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
         holder.Date.setText(tripItems.get(position).getDate());
         holder.Destinaion.setText(tripItems.get(position).getDestination());
         holder.ratingBar.setRating(tripItems.get(position).getRate());
-        String url = "http://i.imgur.com/bIRGzVO.jpg";
+        String url = "https://i.stack.imgur.com/ddX9U.png";
         Picasso.with(mContext).load(url).into(holder.mapImage);
         // holder.mapImage.setImageBitmap(tripItems.get(position).getImage());
         holder.layout.setOnClickListener(new View.OnClickListener() {
