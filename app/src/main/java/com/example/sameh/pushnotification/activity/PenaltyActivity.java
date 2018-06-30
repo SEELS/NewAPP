@@ -129,7 +129,7 @@ public class PenaltyActivity extends AppCompatActivity
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
+                Toast.makeText(getApplicationContext(),items.size()+"",Toast.LENGTH_LONG).show();
                 mAdapter = new PenaltyAdapter(items,mContext);
                 mRecyclerView.setAdapter(mAdapter);
 
@@ -137,7 +137,7 @@ public class PenaltyActivity extends AppCompatActivity
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                Toast.makeText(getApplicationContext(),"Error network Connection",Toast.LENGTH_LONG).show();
             }
         });
         SingleTon.getInstance(getApplicationContext()).addToRequestQueue(request);

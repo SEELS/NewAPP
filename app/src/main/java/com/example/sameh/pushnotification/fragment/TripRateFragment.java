@@ -56,10 +56,10 @@ public class TripRateFragment extends Fragment {
 
     private void getTripRate(){
         SharedPreferences sharedPreferences = context.getSharedPreferences(getString(R.string.FCM_PREF), Context.MODE_PRIVATE);
-        String tripId = sharedPreferences.getString("tripId","");
+        String tripId = sharedPreferences.getString("lastId","");
         if(tripId.equals(""))
         {
-            Toast.makeText(context,"You are not in Trip no!!",Toast.LENGTH_LONG).show();
+            Toast.makeText(context,"You are not in Trip now!!",Toast.LENGTH_LONG).show();
             return;
         }
         String url = "https://seelsapp.herokuapp.com/getTrip/"+tripId;
@@ -78,8 +78,8 @@ public class TripRateFragment extends Fragment {
                 else
                 {
                     try {
-                        //JSONObject object = response.getJSONObject("Success");
-                        rate = response.getDouble("rate");
+                        JSONObject object = response.getJSONObject("Success");
+                        rate = object.getDouble("rate");
                         int vale = (int) ((rate*100)/5);
                         waveLoadingView.setProgressValue(vale);
                         waveLoadingView.setCenterTitle(vale+"%");
@@ -92,7 +92,7 @@ public class TripRateFragment extends Fragment {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                Toast.makeText(context,"Error network Connection",Toast.LENGTH_LONG).show();
             }
         });
         SingleTon.getInstance(context).addToRequestQueue(request);

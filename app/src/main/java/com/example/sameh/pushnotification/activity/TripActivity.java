@@ -138,7 +138,7 @@ public class TripActivity extends AppCompatActivity
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                Toast.makeText(getApplicationContext(),"Error network Connection",Toast.LENGTH_LONG).show();
             }
         });
         SingleTon.getInstance(getApplicationContext()).addToRequestQueue(request);

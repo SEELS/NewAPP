@@ -37,14 +37,13 @@
     <string name="FCM_PREF">com.example.sameh.sensordatatest.fcm_pref</string>
     <string name="FCM_TOKEN">com.example.sameh.sensordatatest.fcm_token</string>
 
-    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_main">Home</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_rate">Rate</string>
     <string name="title_activity_penalty">Penalty</string>
-    <string name="title_activity_trip">TripActivity</string>
-    <string name="title_activity_profile">ProfileActivity</string>
+    <string name="title_activity_trip">Trip</string>
     <string name="title_activity_maps">Map</string>
 
 </resources>

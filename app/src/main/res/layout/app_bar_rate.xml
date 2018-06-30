@@ -25,8 +25,8 @@
             android:background="?attr/colorPrimary"
             android:minHeight="?attr/actionBarSize"
             app:tabGravity="fill"
-            app:tabTextColor="#000"
-            app:tabSelectedTextColor="#fff"
+            app:tabTextColor="#fff"
+            app:tabSelectedTextColor="@color/colorAccent"
             />
 
     </android.support.design.widget.AppBarLayout>

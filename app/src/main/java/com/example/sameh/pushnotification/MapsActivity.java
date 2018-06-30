@@ -12,11 +12,13 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.sameh.pushnotification.Services.LocationService;
 import com.example.sameh.pushnotification.other.SingleTon;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -141,36 +143,44 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void getTrip() {
         String tripId = getIntent().getStringExtra("tripId");
         String url = "http://seelsapp.herokuapp.com/returnTrip/"+tripId+"";
-        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url,null, new Response.Listener<JSONArray>() {
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
-            public void onResponse(JSONArray response) {
+            public void onResponse(JSONObject Objectresponse) {
                 try {
-                    LatLng temp;
-                    PolylineOptions polylineOptions = new PolylineOptions();
-                    polylineOptions.color(Color.BLUE);
-                    LatLng[] points = new LatLng[response.length()];
-                    for (int i=0;i<response.length();i++)
+                    if(Objectresponse.has("Error"))
                     {
-                        JSONObject jsonObject = response.getJSONObject(i);
-                        double lat = jsonObject.getDouble("lat");
-                        double lon = jsonObject.getDouble("lon");
-                        temp = new LatLng(lat,lon);
-                        points[i] = temp;
+                        Toast.makeText(getApplicationContext(),Objectresponse.getString("Error"),Toast.LENGTH_LONG).show();
                     }
-                    polylineOptions.add(points);
-                    mMap.addPolyline(polylineOptions);
+                    else
+                    {
+                        JSONArray response = Objectresponse.getJSONArray("Success");
+                        LatLng temp;
+                        PolylineOptions polylineOptions = new PolylineOptions();
+                        polylineOptions.color(Color.BLUE);
+                        LatLng[] points = new LatLng[response.length()];
+                        for (int i=0;i<response.length();i++)
+                        {
+                            JSONObject jsonObject = response.getJSONObject(i);
+                            double lat = jsonObject.getDouble("lat");
+                            double lon = jsonObject.getDouble("lon");
+                            temp = new LatLng(lat,lon);
+                            points[i] = temp;
+                        }
+                        polylineOptions.add(points);
+                        mMap.addPolyline(polylineOptions);
+
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
 
             }
-        }){
-            // post response
-        };
+        });
         SingleTon.getInstance(MapsActivity.this).addToRequestQueue(request);
 
     }
@@ -178,67 +188,65 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void getNearestTrucks() {
         String driverId = getIntent().getStringExtra("driverId");
         String url = "http://seelsapp.herokuapp.com/getNearLocation/"+driverId+"/"+rad+"";
-        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url,null
-                , new Response.Listener<JSONArray>() {
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
-            public void onResponse(JSONArray response) {
-
+            public void onResponse(JSONObject ObjectResponse) {
                 try {
-                    Log.i("tag", response.length() + " res");
-                    LatLng temp;
-                    //mMap.clear();
+                    if(ObjectResponse.has("Success"))
+                    {
+                        JSONArray response = ObjectResponse.getJSONArray("Success");
+                        Log.i("tag", response.length() + " res");
+                        LatLng temp;
+                        //mMap.clear();
 
-                    drivers.clear();
-                    for (int i = 0; i < response.length(); i++) {
-                        JSONObject jsonObject = response.getJSONObject(i);
-                        JSONObject driver = jsonObject.getJSONObject("driver");
-                        int driver_id = driver.getInt("driver_id");
-                        double lat = jsonObject.getDouble("lat");
-                        double lon = jsonObject.getDouble("lon");
-                        temp = new LatLng(lat, lon);
-                        ArrayList<LatLng> tr;
-                        if (!nearestTrucksPolylines.containsKey(driver_id))
-                            nearestTrucksPolylines.put(driver_id, new ArrayList<LatLng>());
-                        tr = nearestTrucksPolylines.get(driver_id);
-                        tr.add(temp);
-                        drivers.add(driver_id);
-                        nearestTrucksPolylines.put(driver_id, tr);
-                        if(!nearestTrucks.containsKey(driver_id)){
-                            MarkerOptions markerOptions = new MarkerOptions();
-                            markerOptions.position(temp);
-                            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
-                            nearestTrucks.put(driver_id, mMap.addMarker(markerOptions));
-                        }else
-                        {
-                            Marker marker = nearestTrucks.get(driver_id);
-                            marker.setPosition(temp);
+                        drivers.clear();
+                        for (int i = 0; i < response.length(); i++) {
+                            JSONObject jsonObject = response.getJSONObject(i);
+                            JSONObject driver = jsonObject.getJSONObject("driver");
+                            int driver_id = driver.getInt("driver_id");
+                            double lat = jsonObject.getDouble("lat");
+                            double lon = jsonObject.getDouble("lon");
+                            temp = new LatLng(lat, lon);
+                            ArrayList<LatLng> tr;
+                            if (!nearestTrucksPolylines.containsKey(driver_id))
+                                nearestTrucksPolylines.put(driver_id, new ArrayList<LatLng>());
+                            tr = nearestTrucksPolylines.get(driver_id);
+                            tr.add(temp);
+                            drivers.add(driver_id);
+                            nearestTrucksPolylines.put(driver_id, tr);
+                            if(!nearestTrucks.containsKey(driver_id)){
+                                MarkerOptions markerOptions = new MarkerOptions();
+                                markerOptions.position(temp);
+                                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+                                markerOptions.title(driver.getString("name"));
+                                nearestTrucks.put(driver_id, mMap.addMarker(markerOptions));
+                            }else
+                            {
+                                Marker marker = nearestTrucks.get(driver_id);
+                                marker.setPosition(temp);
+                            }
+
+                        }
+                        LatLng lng;
+                        Location l;
+                        if (mMap.getMyLocation() != null) {
+                            l = mMap.getMyLocation();
+                            lng = new LatLng(l.getLatitude(), l.getLongitude());
+                            circle.setCenter(lng);
+                            Log.i("MapsActivity", "center Circle Change");
                         }
 
+                        for (int i=0;i<drivers.size();i++)
+                        {
+                            PolylineOptions polylineOptions = new PolylineOptions();
+                            polylineOptions.color(Color.RED);
+                            ArrayList<LatLng> locations = nearestTrucksPolylines.get(drivers.get(i));
+                            polylineOptions.addAll(locations);
+                            mMap.addPolyline(polylineOptions);
+                        }
                     }
-                    LatLng lng;
-                    Location l;
-                    if (mMap.getMyLocation() != null){
-                        l = mMap.getMyLocation();
-                        lng = new LatLng(l.getLatitude(), l.getLongitude());
-                        circle.setCenter(lng);
-                        Log.i("MapsActivity","center Circle Change");
-                    }
-                    for (Map.Entry<Integer, Marker> entry : nearestTrucks.entrySet())
-                    {
-                        System.out.println(entry.getKey() + "/" + entry.getValue());
-                    }
-
-                    for (int i=0;i<drivers.size();i++)
-                    {
-                        PolylineOptions polylineOptions = new PolylineOptions();
-                        polylineOptions.color(Color.RED);
-                        ArrayList<LatLng> locations = nearestTrucksPolylines.get(drivers.get(i));
-                        polylineOptions.addAll(locations);
-                        mMap.addPolyline(polylineOptions);
-                    }
-
                 } catch (JSONException e) {
-                    locations.clear();
                     e.printStackTrace();
                 }
             }
@@ -247,9 +255,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onErrorResponse(VolleyError error) {
 
             }
-        }){
-            // post response
-        };
+        });
         SingleTon.getInstance(MapsActivity.this).addToRequestQueue(request);
 
     }

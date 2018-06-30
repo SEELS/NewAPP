@@ -89,7 +89,7 @@ public class LocationService extends Service
                 }
                 else{
                     Log.i("SendLocation","not send....");
-                    prev_location.setSpeed(60);
+                    prev_location.setSpeed(prev_location.getSpeed()+5);
                 }
             }
             else {

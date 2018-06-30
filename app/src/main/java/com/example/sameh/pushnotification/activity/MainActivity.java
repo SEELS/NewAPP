@@ -144,6 +144,7 @@ public class MainActivity extends AppCompatActivity
                         editor.commit();
                         String tripId = response.getString("Success");
                         Toast.makeText(getApplicationContext(),tripId,Toast.LENGTH_LONG).show();
+
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -152,7 +153,7 @@ public class MainActivity extends AppCompatActivity
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                Toast.makeText(getApplicationContext(),"Error network Connection",Toast.LENGTH_LONG).show();
             }
         });
         SingleTon.getInstance(getApplicationContext()).addToRequestQueue(request);
@@ -183,11 +184,12 @@ public class MainActivity extends AppCompatActivity
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                Toast.makeText(getApplicationContext(),"Error network Connection",Toast.LENGTH_LONG).show();
             }
         });
         SingleTon.getInstance(getApplicationContext()).addToRequestQueue(request);
     }
+
     private void StartTrip() {
         String url = "https://seelsapp.herokuapp.com/startTrip/"+driverId+"/"+tripId;
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url,null, new Response.Listener<JSONObject>() {
@@ -200,10 +202,14 @@ public class MainActivity extends AppCompatActivity
                     }
                     else {
                         String roadId = response.getString("Success");
-                        Toast.makeText(getApplicationContext(),roadId,Toast.LENGTH_LONG).show();
+//                        Toast.makeText(getApplicationContext(),roadId,Toast.LENGTH_LONG).show();
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.putString("roadId", roadId);
                         editor.commit();
+                        Intent intent = new Intent(MainActivity.this,MapsActivity.class);
+                        intent.putExtra("driverId",driverId);
+                        intent.putExtra("tripId",tripId);
+                        startActivity(intent);
 
                     }
                 } catch (JSONException e) {
@@ -213,7 +219,7 @@ public class MainActivity extends AppCompatActivity
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                Toast.makeText(getApplicationContext(),"Error network Connection",Toast.LENGTH_LONG).show();
             }
         });
         SingleTon.getInstance(getApplicationContext()).addToRequestQueue(request);
