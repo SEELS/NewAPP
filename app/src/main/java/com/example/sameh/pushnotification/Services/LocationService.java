@@ -83,6 +83,8 @@ public class LocationService extends Service
                 distance/=1000; // from meter to KM
                 if (checkLocation(diffTime,distance,prev_location.getSpeed())) {
                     speed = distance / diffTime;
+                    if (location.hasSpeed())
+                        speed = location.getSpeed()*3.6;
                     saveLocation(lat, lon, speed);
                     prev_location.set(location);
                     prev_location.setSpeed((float) speed);
@@ -95,8 +97,12 @@ public class LocationService extends Service
             else {
                 saveLocation(lat, lon, speed);
                 prev_location.set(location);
-                prev_location.setSpeed(60);
+                if(!location.hasSpeed())
+                    prev_location.setSpeed(10);
+                float prespeed = (float) (location.getSpeed()*3.6);
+                prev_location.setSpeed(prespeed);
             }
+
 
         }
 
@@ -202,3 +208,5 @@ public class LocationService extends Service
         }
     }
 }
+
+// 5 m/s   = 5 * (3.6) = 18 km/h
