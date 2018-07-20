@@ -2,7 +2,9 @@ package com.example.sameh.pushnotification;
 
 import android.*;
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
@@ -51,6 +53,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Map<Integer,Marker> nearestTrucks;
     private Map<Integer,ArrayList<LatLng>> nearestTrucksPolylines;
     private ArrayList<Integer> drivers;
+    SharedPreferences sharedPreferences;
+    String roadId;
     private  boolean start = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,8 +145,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     public void getTrip() {
-        String tripId = getIntent().getStringExtra("tripId");
-        String url = "http://seelsapp.herokuapp.com/returnTrip/"+tripId+"";
+        sharedPreferences = getApplicationContext().getSharedPreferences(getString(R.string.FCM_PREF), Context.MODE_PRIVATE);
+        roadId=sharedPreferences.getString("roadId","");
+
+        String url = "http://seelsapp.herokuapp.com/getRoad/"+roadId;
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject Objectresponse) {
@@ -160,6 +166,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         LatLng[] points = new LatLng[response.length()];
                         for (int i=0;i<response.length();i++)
                         {
+
                             JSONObject jsonObject = response.getJSONObject(i);
                             double lat = jsonObject.getDouble("lat");
                             double lon = jsonObject.getDouble("lon");
@@ -235,6 +242,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             lng = new LatLng(l.getLatitude(), l.getLongitude());
                             circle.setCenter(lng);
                             Log.i("MapsActivity", "center Circle Change");
+                        }
+                        for(Map.Entry<Integer,Marker> entry :nearestTrucks.entrySet())
+                        {
+                            if (!drivers.contains(entry.getKey()))
+                            {
+                                entry.getValue().remove();
+                            }
                         }
 
                         for (int i=0;i<drivers.size();i++)

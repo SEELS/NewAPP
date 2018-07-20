@@ -74,7 +74,7 @@ public class LocationService extends Service
             double lat = location.getLatitude();
             double lon = location.getLongitude();
             double speed =0.0;
-            Log.i("SendLocation",prev_location.getSpeed()+"....");
+            Log.i("SendLocation preSpeed",prev_location.getSpeed()*3.6+"....");
             if (prev_location.getLongitude()!=0) {
                 double distance = location.distanceTo(prev_location);
                 double diffTime = location.getTime() - prev_location.getTime();
@@ -85,6 +85,8 @@ public class LocationService extends Service
                     speed = distance / diffTime;
                     if (location.hasSpeed())
                         speed = location.getSpeed()*3.6;
+
+                    Log.i("SendLocation","send....");
                     saveLocation(lat, lon, speed);
                     prev_location.set(location);
                     prev_location.setSpeed((float) speed);

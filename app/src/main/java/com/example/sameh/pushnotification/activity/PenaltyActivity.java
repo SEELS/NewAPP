@@ -42,7 +42,7 @@ public class PenaltyActivity extends AppCompatActivity
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private ArrayList<PenaltyItem> items;
-    String tripId;
+    String driverId;
 
 
     SharedPreferences sharedPreferences;
@@ -81,7 +81,7 @@ public class PenaltyActivity extends AppCompatActivity
         mRecyclerView.setLayoutManager(mLayoutManager);
         // specify an adapter (see also next example)
         sharedPreferences = getApplicationContext().getSharedPreferences(getString(R.string.FCM_PREF),Context.MODE_PRIVATE);
-        tripId=sharedPreferences.getString("lastId","");
+        driverId=sharedPreferences.getString("driverId","");
 
         items = new ArrayList<>();
         // fill items
@@ -100,7 +100,7 @@ public class PenaltyActivity extends AppCompatActivity
     private void getItemsData(final Context mContext) {
         // fill items
 
-        String Url = "http://seelsapp.herokuapp.com/getPenaltiesByTrip/"+tripId;
+        String Url = "http://seelsapp.herokuapp.com/getPenaltiesByDriverTrip/"+driverId;
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, Url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject responseObject) {
@@ -116,12 +116,32 @@ public class PenaltyActivity extends AppCompatActivity
                         for (int i=0;i<response.length();i++) {
                             JSONObject jsonObject = response.getJSONObject(i);
                             String type = jsonObject.getString("type");
-                            String value = jsonObject.getString("value");
+                            String value = jsonObject.getString("cause");
                             PenaltyItem item = new PenaltyItem();
                             item.setType(type);
-                            item.setImageId(R.drawable.speed);
+                            if (type=="brake")
+                                item.setImageId(R.drawable.brake);
+                            else
+                            {
+                                item.setImageId(R.drawable.speed);
+                            }
                             // change based on type
-                            String Desc = "You have breack speed Limit with Speed"+value;
+                            double diffSpeed = Double.parseDouble(value)-90 ;
+                            String[] speed = value.split(" " );
+                            double currSpeed = Double.parseDouble(speed[0]);
+                            double prevSpeed = Double.parseDouble(speed[1]);
+                            String speedError = "You exceeded the speed limit by " + diffSpeed + " KPH";
+                            String brakeError = "You suddenly broke from " + prevSpeed + " KPH to " + currSpeed + " KPH";
+                            String Desc ;
+                            if(type=="brake")
+                            {
+                                Desc = brakeError;
+                            }
+                            else
+                            {
+                                Desc = speedError;
+                            }
+
                             item.setDescription(Desc);
                             items.add(item);
                         }
